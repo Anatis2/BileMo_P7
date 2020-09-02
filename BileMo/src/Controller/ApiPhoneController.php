@@ -4,16 +4,25 @@ namespace App\Controller;
 
 use App\Repository\PhoneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ApiPhoneController extends AbstractController
 {
     /**
-     * @Route("/api/phones", name="api_phones_index", methods={"GET"})
+     * @Route("/api/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
      */
-    public function index(PhoneRepository $phoneRepository)
+    public function index(PhoneRepository $phoneRepository, Request $request)
     {
-        return $this->json($phoneRepository->findAll(), 200, []);
+    	$page = $request->query->get('page');
+
+    	if(is_null($page) || $page < 1) {
+    		$page = 1;
+		}
+
+    	$limit = 10;
+
+        return $this->json($phoneRepository->findAllPhones($page, $limit), 200, []);
     }
 
 	/**
