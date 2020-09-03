@@ -34,6 +34,7 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank(message="L'email est obligatoire")
+	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
      */
     private $email;
 
