@@ -10,11 +10,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Class ApiPhoneController
+ * @package App\Controller
+ * @Route("/api")
+ */
 class ApiPhoneController extends AbstractController
 {
 
 	/**
-	 * @Route("/api/phones/{id}", name="api_phones_details", methods={"GET"})
+	 * @Route("/phones/{id}", name="api_phones_details", methods={"GET"})
 	 */
     public function details(PhoneRepository $phoneRepository, Phone $phone)
 	{
@@ -24,7 +29,7 @@ class ApiPhoneController extends AbstractController
 	}
 
 	/**
-	 * @Route("/api/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
+	 * @Route("/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
 	 */
 	public function index(PhoneRepository $phoneRepository, Request $request)
 	{

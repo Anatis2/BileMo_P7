@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -21,6 +22,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank(message="Le nom est obligatoire")
      */
     private $surname;
 
@@ -31,6 +33,7 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank(message="L'email est obligatoire")
      */
     private $email;
 

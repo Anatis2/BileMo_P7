@@ -12,6 +12,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
 
+        dump($exception);
+        die();
+
         $data = [
         	'status' => $exception->getStatusCode(),
 			'message' => 'Resource not found'

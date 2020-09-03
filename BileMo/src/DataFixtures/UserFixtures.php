@@ -14,7 +14,7 @@ class UserFixtures extends Fixture
 
 		for($i = 1 ; $i <= 15 ; $i++) {
 			$user = new User();
-			$user->setSurname($faker->name)
+			$user->setSurname($faker->lastName)
 				 ->setFirstname($faker->firstName)
 				 ->setEmail($faker->email)
 				 ->setRegisteredAt(new \DateTime());
