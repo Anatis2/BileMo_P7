@@ -13,7 +13,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 class ApiPhoneController extends AbstractController
 {
 
-
 	/**
 	 * @Route("/api/phones/{id}", name="api_phones_details", methods={"GET"})
 	 */
@@ -27,7 +26,7 @@ class ApiPhoneController extends AbstractController
 	/**
 	 * @Route("/api/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
 	 */
-	public function index(PhoneRepository $phoneRepository, Request $request, SerializerInterface $serializer)
+	public function index(PhoneRepository $phoneRepository, Request $request)
 	{
 		$page = $request->query->get('page');
 		if(is_null($page) || $page < 1) {
