@@ -3,10 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -18,30 +22,45 @@ class Client implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+	 * @Groups("users:read")
      */
     private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, nullable=true)
+	 * @Groups("users:read")
 	 */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
+	 * @Groups("users:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
+	 * @Groups("users:read")
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+	 * @Groups("users:read")
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="client", orphanRemoval=true)
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,18 +71,18 @@ class Client implements UserInterface
 	 * @return mixed
 	 */
 	public function getName()
-	{
-		return $this->name;
-	}
+                        	{
+                        		return $this->name;
+                        	}
 
 	/**
 	 * @param mixed $name
 	 */
 	public function setName($name)
-	{
-		$this->name = $name;
-		return $this;
-	}
+                        	{
+                        		$this->name = $name;
+                        		return $this;
+                        	}
 
 
     public function getEmail(): ?string
@@ -137,5 +156,36 @@ class Client implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getClient() === $this) {
+                $user->setClient(null);
+            }
+        }
+
+        return $this;
     }
 }

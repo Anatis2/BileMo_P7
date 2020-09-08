@@ -6,8 +6,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use App\Entity\Client;
 /**
  * @ApiResource()
  * @UniqueEntity(fields={"email"}, message="Cet email est déjà utilisé")
@@ -19,17 +20,20 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+	 * @Groups("users:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank(message="Le nom est obligatoire")
+	 * @Groups("users:read")
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+	 * @Groups("users:read")
      */
     private $firstname;
 
@@ -37,6 +41,7 @@ class User
      * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank(message="L'email est obligatoire")
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
+	 * @Groups("users:read")
      */
     private $email;
 
@@ -44,6 +49,12 @@ class User
      * @ORM\Column(type="datetime")
      */
     private $registeredAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $client;
 
     public function getId(): ?int
     {
@@ -94,6 +105,18 @@ class User
     public function setRegisteredAt(\DateTimeInterface $registeredAt): self
     {
         $this->registeredAt = $registeredAt;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

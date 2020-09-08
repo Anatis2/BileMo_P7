@@ -29,7 +29,7 @@ class ApiUserController extends AbstractController
 	{
 		$user = $userRepository->find($user->getId());
 
-		return $this->json($user, 200, []);
+		return $this->json($user, 200, [], ['groups' => 'users:read']);
 	}
 
     /**
@@ -45,7 +45,7 @@ class ApiUserController extends AbstractController
 
 		$userList = $userRepository->findAllUsers($page, $limit);
 
-		return $this->json($userList, 200, []);
+		return $this->json($userList, 200, [], ['groups' => 'users:read']);
     }
 
 	/**
