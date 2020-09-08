@@ -39,11 +39,6 @@ class User
     private $email;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $phoneNumber;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $registeredAt;
@@ -85,18 +80,6 @@ class User
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPhoneNumber(): ?int
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?int $phoneNumber): self
-    {
-        $this->phoneNumber = $phoneNumber;
 
         return $this;
     }

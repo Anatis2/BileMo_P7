@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
@@ -20,8 +21,14 @@ class Client implements UserInterface
      */
     private $id;
 
+	/**
+	 * @ORM\Column(type="string", length=180, nullable=true)
+	 */
+    private $name;
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
      */
     private $email;
 
@@ -40,6 +47,24 @@ class Client implements UserInterface
     {
         return $this->id;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * @param mixed $name
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+		return $this;
+	}
+
 
     public function getEmail(): ?string
     {
