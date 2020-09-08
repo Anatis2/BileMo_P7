@@ -14,15 +14,9 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
-            json_login:
-                check_path: /api/login
-            #lazy: true
-            #provider: app_user_provider
 
         login:
-            pattern:  ^/api/login
+            pattern:  ^/api/(login|register)
             stateless: true
             anonymous: true
             json_login:
@@ -48,5 +42,6 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
