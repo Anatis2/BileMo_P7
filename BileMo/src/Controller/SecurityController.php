@@ -58,16 +58,15 @@ class SecurityController extends AbstractController
     }
 
 	/**
-	 * @param Request $request
 	 * @Route("/login", name="api_clients_login", methods={"POST"})
 	 */
-    public function login(Request $request)
+    public function login()
 	{
 		$client = $this->getUser();
 
 		return $this->json([
-			'email' => $client->getUsername(),
-			'roles' => $client->getRoles()
+			'email' => is_object($client) ? $client->getUsername() : '',
+			'roles' => is_object($client) ? $client->getRoles() : ''
 		]);
 	}
 }
