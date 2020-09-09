@@ -35,20 +35,17 @@ class Client implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
-	 * @Groups("users:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="json")
-	 * @Groups("users:read")
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-	 * @Groups("users:read")
      */
     private $password;
 
