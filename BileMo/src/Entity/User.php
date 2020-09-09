@@ -20,40 +20,41 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-	 * @Groups("users:read")
+	 * @Groups({"users:read", "users:create"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-	 * @Assert\NotBlank(message="Le nom est obligatoire")
-	 * @Groups("users:read")
+	 * @Assert\NotBlank(message="Le champ surname ne peut pas être vide")
+	 * @Groups({"users:read", "users:create"})
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups("users:read")
+	 * @Groups({"users:read", "users:create"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-	 * @Assert\NotBlank(message="L'email est obligatoire")
+	 * @Assert\NotBlank(message="Le champ email ne peut pas être vide")
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
-	 * @Groups("users:read")
+	 * @Groups({"users:read", "users:create"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="datetime")
+	 * @Groups({"users:read", "users:create"})
      */
     private $registeredAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="users")
-     * @ORM\JoinColumn(nullable=true)
-	 * @Groups("users:read")
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+	 * @Groups({"users:read"})
      */
     private $client;
 

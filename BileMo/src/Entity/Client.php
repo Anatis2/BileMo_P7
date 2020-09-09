@@ -22,19 +22,20 @@ class Client implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-	 * @Groups("users:read")
+	 * @Groups({"users:read"})
      */
     private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, nullable=true)
-	 * @Groups("users:read")
+	 * @Groups({"users:read"})
 	 */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
+	 * @Assert\NotBlank(message="Le champ email ne peut pas être vide")
      */
     private $email;
 
@@ -46,6 +47,8 @@ class Client implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+	 * @Assert\NotNull(message="Le champ password ne peut pas être nul")
+	 * @Assert\NotBlank(message="Le champ password ne peut pas être vide")
      */
     private $password;
 
@@ -68,18 +71,18 @@ class Client implements UserInterface
 	 * @return mixed
 	 */
 	public function getName()
-                        	{
-                        		return $this->name;
-                        	}
+	{
+		return $this->name;
+	}
 
 	/**
 	 * @param mixed $name
 	 */
 	public function setName($name)
-                        	{
-                        		$this->name = $name;
-                        		return $this;
-                        	}
+	{
+		$this->name = $name;
+		return $this;
+	}
 
 
     public function getEmail(): ?string

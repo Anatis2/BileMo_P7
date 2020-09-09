@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use ApiPlatform\Core\Validator\ValidatorInterface;
+use App\Entity\Client;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,21 +52,25 @@ class ApiUserController extends AbstractController
 	/**
 	 * @Route("/users", name="api_users_create", methods={"POST"})
 	 */
-    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator)
+    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
 		try {
 			$user = $serializer->deserialize($jsonReceived, User::class, 'json');
 			$user->setRegisteredAt(new \DateTime());
+
+			$client = $securityController->getUser();
+			$user->setClient($client);
+
 			$validator->validate($user);
 			$em->persist($user);
 			$em->flush();
-			return $this->json($user, 201, []);
+			return $this->json($user, 201, [], ['groups' => 'users:create']);
 		} catch(NotEncodableValueException $e) {
 			return $this->json([
 				'status' => 400,
-				'message' => $e->getMessage()
+				'message' => "Erreur : vos données n'ont pas été envoyées. Veuillez vérifier la syntaxe de votre JSON."
 			], 400);
 		}
 	}

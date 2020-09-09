@@ -5,7 +5,9 @@ namespace App\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -16,7 +18,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if($exception instanceof NotFoundHttpException) {
 			$data = [
 				'status' => $exception->getStatusCode(),
-				'message' => 'Resource not found'
+				'message' => 'Cette route n\'existe pas, ou n\'a pas été trouvée'
 			];
 
 			$response = new JsonResponse($data);
