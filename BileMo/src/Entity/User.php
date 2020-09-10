@@ -6,17 +6,21 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Groups;
+//use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\Client;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
  * @UniqueEntity(fields={"email"}, message="Cet email est déjà utilisé")
  * @ORM\Entity(repositoryClass=UserRepository::class)
  *
- * @Hateoas\Relation("self", href = "expr('/api/users/' ~ object.getId())")
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = "expr('/api/users/' ~ object.getId())"
+ * )
  */
 class User
 {

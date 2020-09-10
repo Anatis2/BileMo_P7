@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
+ *
+ * @Hateoas\Relation("self", href = "expr('/api/phones/' ~ object.getId())")
  */
 class Phone
 {

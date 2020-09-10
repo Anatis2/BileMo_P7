@@ -6,9 +6,11 @@ use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Class ApiPhoneController
@@ -21,11 +23,16 @@ class ApiPhoneController extends AbstractController
 	/**
 	 * @Route("/phones/{id}", name="api_phones_details", methods={"GET"})
 	 */
-    public function details(PhoneRepository $phoneRepository, Phone $phone)
+    public function details(PhoneRepository $phoneRepository, Phone $phone, \JMS\Serializer\SerializerInterface $serializer)
 	{
 		$phone = $phoneRepository->find($phone->getId());
 
-		return $this->json($phone, 200, []);
+		$json = $serializer->serialize($phone, 'json');
+
+		$response = new Response($json);
+		$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
 	}
 
 	/**

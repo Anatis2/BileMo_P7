@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
+use JMS\Serializer\SerializationContext;
 
 /**
  * Class ApiUserController
@@ -26,17 +27,22 @@ class ApiUserController extends AbstractController
 	/**
 	 * @Route("/users/{id}", name="api_users_details", methods={"GET"})
 	 */
-	public function details(UserRepository $userRepository, User $user)
+	public function details(UserRepository $userRepository, User $user, \JMS\Serializer\SerializerInterface $serializer)
 	{
 		$user = $userRepository->find($user->getId());
 
-		return $this->json($user, 200, [], ['groups' => 'users:read']);
+		$json = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups(array('users:read')));
+
+		$response = new Response($json);
+		$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
 	}
 
     /**
      * @Route("/users", name="api_users_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository, Request $request)
+    public function index(UserRepository $userRepository, Request $request, \JMS\Serializer\SerializerInterface $serializer)
     {
 		$page = $request->query->get('page');
 		if(is_null($page) || $page < 1) {
@@ -46,13 +52,18 @@ class ApiUserController extends AbstractController
 
 		$userList = $userRepository->findAllUsers($page, $limit);
 
-		return $this->json($userList, 200, [], ['groups' => 'users:read']);
+		$json = $serializer->serialize($userList, 'json', SerializationContext::create()->setGroups(array('users:read')));
+
+		$response = new Response($json);
+		$response->headers->set('Content-Type', 'application/json');
+
+		return $response;
     }
 
 	/**
 	 * @Route("/users", name="api_users_create", methods={"POST"})
 	 */
-    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
+    public function create(Request $request, \JMS\Serializer\SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
