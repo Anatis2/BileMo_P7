@@ -25,6 +25,16 @@ class ExceptionSubscriber implements EventSubscriberInterface
 			$event->setResponse($response);
 		}
 
+        if($exception instanceof AccessDeniedHttpException) {
+			$data = [
+				'status' => $exception->getStatusCode(),
+				'message' => 'Ce mail existe déjà'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
     }
 
     public static function getSubscribedEvents()

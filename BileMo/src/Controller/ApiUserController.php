@@ -15,8 +15,7 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
-
+use Swagger\Annotations as OA;
 
 /**
  * Class ApiUserController
@@ -57,7 +56,7 @@ class ApiUserController extends AbstractController
 	/**
 	 * @Route("/users", name="api_users_create", methods={"POST"})
 	 */
-    /*public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
+    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
@@ -78,7 +77,7 @@ class ApiUserController extends AbstractController
 				'message' => "Erreur : vos données n'ont pas été envoyées. Veuillez vérifier la syntaxe de votre JSON."
 			], 400);
 		}
-	}*/
+	}
 
 	/**
 	 * @Route("/users/{id}", name="api_users_delete", methods={"DELETE"})

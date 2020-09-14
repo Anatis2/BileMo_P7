@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as OA;
 
 /**
  * Class ApiPhoneController
@@ -20,6 +23,10 @@ class ApiPhoneController extends AbstractController
 
 	/**
 	 * @Route("/phones/{id}", name="api_phones_details", methods={"GET"})
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Returns the rewards of an user",
+	 * )
 	 */
     public function details(PhoneRepository $phoneRepository, Phone $phone)
 	{

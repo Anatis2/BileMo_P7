@@ -231,6 +231,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "swagger-api/swagger-ui": {
+        "version": "v3.33.0"
+    },
     "symfony/asset": {
         "version": "v5.1.4"
     },

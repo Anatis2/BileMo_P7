@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\Client;
+
 /**
  * @ApiResource()
  * @UniqueEntity(fields={"email"}, message="Cet email est déjà utilisé")

@@ -36,25 +36,29 @@ class SecurityController extends AbstractController
 			$errors = $validator->validate($client);
 			if(count($errors)) {
 				return $this->json([
-					'status' => 400,
+					'status' => 500,
 					'message' => $errors
-				], 400);
+				], 500);
 			}
 
 			try {
+
 				$em->persist($client);
 				$em->flush();
-
 				return $this->json([
 					'status' => 201,
 					'message' => 'Le client a bien été créé'
 				], 201);
-
 				return new JsonResponse($data, 201);
 			} catch (NotEncodableValueException $e) {
 				return $this->json([
 					'status' => 400,
 					'message' => "Erreur : vos données n'ont pas été envoyées. Veuillez vérifier la syntaxe de votre JSON."
+				], 400);
+			} catch (\Exception $e) {
+				return $this->json([
+					'status' => 400,
+					'message' => "Erreur : il y a eu un problème lors de votre enregistrement."
 				], 400);
 			}
 		}
