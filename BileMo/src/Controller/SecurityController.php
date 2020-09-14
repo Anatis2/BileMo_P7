@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swagger\Annotations as OA;
 
 /**
  * Class SecurityController
@@ -22,9 +22,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class SecurityController extends AbstractController
 {
     /**
+	 * Enregistre un client (fournisseur) dans la BDD
+	 *
      * @Route("/register", name="api_clients_register", methods={"POST"})
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="L'inscription a bien été prise en compte",
+	 * )
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em, SerializerInterface $serializer, ValidatorInterface $validator)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em, ValidatorInterface $validator)
     {
         $values = json_decode($request->getContent());
 
@@ -40,9 +46,7 @@ class SecurityController extends AbstractController
 					'message' => $errors
 				], 500);
 			}
-
 			try {
-
 				$em->persist($client);
 				$em->flush();
 				return $this->json([
@@ -70,7 +74,13 @@ class SecurityController extends AbstractController
     }
 
 	/**
-	 * @Route("/login", name="api_clients_login", methods={"POST"})
+	 * Authentifie le client (fournisseur)
+	 *
+	 * @Route("/login_check", name="api_clients_login", methods={"POST"})
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="L'authentification s'est bien passée",
+	 * )
 	 */
     public function login()
 	{

@@ -27,7 +27,23 @@ class ApiUserController extends AbstractController
 {
 
 	/**
+	 * Affiche les détails d'un utilisateur
+	 *
 	 * @Route("/users/{id}", name="api_users_details", methods={"GET"})
+	 *
+	 * @OA\Tag(name="Users")
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Affiche les détails d'un utilisateur",
+	 * )
+	 * @OA\Response(
+	 *     response=404,
+	 *     description="L'identifiant n'existe pas",
+	 * )
+	 * @OA\Response(
+	 *     response=401,
+	 *     description="Le token est invalide, a expiré, ou n'est pas renseigné",
+	 * )
 	 */
 	public function details(UserRepository $userRepository, User $user)
 	{
@@ -38,7 +54,15 @@ class ApiUserController extends AbstractController
 	}
 
     /**
+	 * Liste l'ensemble des utilisateurs présents en BDD
+	 *
      * @Route("/users", name="api_users_index", methods={"GET"})
+	 *
+	 * @OA\Tag(name="Users")
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Liste l'ensemble des utilisateurs présents en BDD",
+	 * )
      */
     public function index(UserRepository $userRepository, Request $request)
     {
@@ -54,7 +78,19 @@ class ApiUserController extends AbstractController
     }
 
 	/**
+	 * Créée un nouvel utilisateur
+	 *
 	 * @Route("/users", name="api_users_create", methods={"POST"})
+	 *
+	 * @OA\Tag(name="Users")
+	 * @OA\Response(
+	 *     response=201,
+	 *     description="Créée un nouvel utilisateur",
+	 * )
+	 * @OA\Response(
+	 *     response=400,
+	 *     description="Les champs sont non conformes ou l'email est déjà utilisé",
+	 * )
 	 */
     public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
@@ -80,7 +116,19 @@ class ApiUserController extends AbstractController
 	}
 
 	/**
+	 * Supprime un utilisateur
+	 *
 	 * @Route("/users/{id}", name="api_users_delete", methods={"DELETE"})
+	 *
+	 * @OA\Tag(name="Users")
+	 * @OA\Response(
+	 *     response=204,
+	 *     description="Il n'y a plus de contenu lié à cet ID (l'utilisateur a bien été supprimé)",
+	 * )
+	 * @OA\Response(
+	 *     response=404,
+	 *     description="L'identifiant n'existe pas",
+	 * )
 	 */
 	public function delete(User $user, EntityManagerInterface $em)
 	{

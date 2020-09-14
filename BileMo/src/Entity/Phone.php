@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PhoneRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Swagger\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
@@ -14,6 +15,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+	 * @OA\Property(description="L'identifiant unique du téléphone")
      */
     private $id;
 

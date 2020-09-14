@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Doctrine\ORM\NonUniqueResultException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -28,7 +29,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if($exception instanceof AccessDeniedHttpException) {
 			$data = [
 				'status' => $exception->getStatusCode(),
-				'message' => 'Ce mail existe déjà'
+				'message' => 'Vous n\'êtes pas autorisé à venir ici'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
+		if($exception instanceof NonUniqueResultException) {
+			$data = [
+				'status' => $exception->getStatusCode(),
+				'message' => 'Cet email est déjà utilisé'
 			];
 
 			$response = new JsonResponse($data);

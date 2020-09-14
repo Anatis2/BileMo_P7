@@ -22,10 +22,22 @@ class ApiPhoneController extends AbstractController
 {
 
 	/**
+	 * Affiche les détails d'un téléphone
+	 *
 	 * @Route("/phones/{id}", name="api_phones_details", methods={"GET"})
+	 *
+	 * @OA\Tag(name="Phones")
 	 * @OA\Response(
 	 *     response=200,
-	 *     description="Returns the rewards of an user",
+	 *     description="Affiche les détails d'un téléphone",
+	 * )
+	 * @OA\Response(
+	 *     response=404,
+	 *     description="L'identifiant n'existe pas",
+	 * )
+	 * @OA\Response(
+	 *     response=401,
+	 *     description="Le token est invalide, a expiré, ou n'est pas renseigné",
 	 * )
 	 */
     public function details(PhoneRepository $phoneRepository, Phone $phone)
@@ -36,7 +48,15 @@ class ApiPhoneController extends AbstractController
 	}
 
 	/**
+	 * Liste l'ensemble des téléphones présents dans le catalogue
+	 *
 	 * @Route("/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
+	 *
+	 * @OA\Tag(name="Phones")
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Liste l'ensemble des téléphones présents dans le catalogue",
+	 * )
 	 */
 	public function index(PhoneRepository $phoneRepository, Request $request)
 	{
