@@ -46,7 +46,7 @@ Exemple :
 }
 
 Authentification
--------------------------
+-----------------
 
 L’authentification est obligatoire pour accéder à l’ensemble des fonctionnalités de l’API
 
@@ -73,21 +73,21 @@ Lister l’ensemble des produits de Bilemo
 GET /phones
 
 Utilisation de la pagination pour le catalogue de téléphones
----------------------------------------------------------------
+-------------------------------------------------------------
 
 GET /phones?page={numero}
 
 Exemple : GET /phones?page=2
 
 Consulter les détails d’un produit BileMo
----------------------------------------------------------------
+------------------------------------------
 
 GET /phones/{id}
 
 Exemple : GET /phones/17
 
 Consulter la liste des utilisateurs
----------------------------------------------------------------
+------------------------------------
 
 GET /users
 
@@ -99,14 +99,14 @@ GET /users?page={numero}
 Exemple : GET /users?page=2
 
 Consulter les détails d’un utilisateur
----------------------------------------------------------------
+---------------------------------------
 
 GET /users/{id}
 
 Exemple : GET /users/12
 
 Ajouter un nouvel utilisateur
----------------------------------------------------------------
+------------------------------
 
 POST /users
 
@@ -123,7 +123,7 @@ Exemple :
 }
 
 Supprimer un utilisateur
------------------------------
+-------------------------
 
 DELETE /users/{id}
 
