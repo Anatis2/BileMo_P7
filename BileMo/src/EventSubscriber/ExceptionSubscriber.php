@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Doctrine\ORM\NonUniqueResultException;
@@ -40,6 +41,16 @@ class ExceptionSubscriber implements EventSubscriberInterface
 			$data = [
 				'status' => $exception->getStatusCode(),
 				'message' => 'Cet email est déjà utilisé'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
+		if($exception instanceof BadRequestHttpException) {
+			$data = [
+				'status' => $exception->getStatusCode(),
+				'message' => 'Les champs username et password sont requis'
 			];
 
 			$response = new JsonResponse($data);
