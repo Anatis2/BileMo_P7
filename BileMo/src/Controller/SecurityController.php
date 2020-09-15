@@ -38,8 +38,7 @@ class SecurityController extends AbstractController
         if(isset($values->email, $values->password)) {
         	$client = new Client();
         	$client->setEmail($values->email);
-			$client->setPassword($passwordEncoder->encodePassword($client, $values->password));
-			$client->setRoles($client->getRoles());
+        	$client->setPassword($values->password);
 			$errors = $validator->validate($client);
 			if(count($errors)) {
 				foreach ($errors as $error) {
@@ -49,6 +48,9 @@ class SecurityController extends AbstractController
 					], 500);
 				}
 			}
+			$client->setPassword($passwordEncoder->encodePassword($client, $values->password));
+			$client->setRoles($client->getRoles());
+
 			try {
 				$em->persist($client);
 				$em->flush();

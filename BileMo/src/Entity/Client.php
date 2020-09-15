@@ -47,8 +47,8 @@ class Client implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-	 * @Assert\NotNull(message="Le champ password ne peut pas être nul")
 	 * @Assert\NotBlank(message="Le champ password ne peut pas être vide")
+	 * @Assert\NotNull(message="Le champ password ne peut pas être nul")
      */
     private $password;
 
