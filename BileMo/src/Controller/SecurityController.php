@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Swagger\Annotations as OA;
 
@@ -41,10 +42,12 @@ class SecurityController extends AbstractController
 			$client->setRoles($client->getRoles());
 			$errors = $validator->validate($client);
 			if(count($errors)) {
-				return $this->json([
-					'status' => 500,
-					'message' => $errors
-				], 500);
+				foreach ($errors as $error) {
+					return $this->json([
+						'status' => 500,
+						'message' => $error->getMessage()
+					], 500);
+				}
 			}
 			try {
 				$em->persist($client);
