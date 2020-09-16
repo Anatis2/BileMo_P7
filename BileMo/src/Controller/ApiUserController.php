@@ -5,6 +5,7 @@ namespace App\Controller;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Entity\Client;
 use App\Entity\User;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,33 +70,16 @@ class ApiUserController extends AbstractController
 	{
 		$user = $userRepository->find($user->getId());
 
-		$datas = json_decode($request->getContent());
+		$form = $this->createForm(UserType::class);
+		$form->submit($request->getContent());
 
-		if($datas) {
-			if(isset($datas->surname) || isset($datas->firstname) || isset($datas->email)) {
-				if(isset($datas->surname)) {
-					$user->setSurname($datas->surname);
-					$validator->validate($user);
-					$em->persist($user);
-				}
-				if(isset($datas->firstname)) {
-					$user->setFirstname($datas->firstname);
-					$validator->validate($user);
-					$em->persist($user);
-				}
-				if(isset($datas->email)) {
-					$user->setEmail($datas->email);
-					$validator->validate($user);
-					$em->persist($user);
-				}
-				$em->flush();
-				return $this->json([
-					'status' => 201,
-					'message' => 'L\'utilisateur a bien été modifié'
-				], 201);
+		if($form->isSubmitted()) {
+			if($form->isValid()) {
+				return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:read']);
 			} else {
-				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 500, [], ['groups' => 'users:read']);
+				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 400, [], ['groups' => 'users:read']);
 			}
+
 		}
 
 		return $this->json($user, 200, [], ['groups' => 'users:read']);
