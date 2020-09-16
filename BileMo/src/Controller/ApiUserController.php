@@ -65,31 +65,37 @@ class ApiUserController extends AbstractController
 	 *     description="Modifie les détails d'un utilisateur",
 	 * )
 	 */
-	public function modify(UserRepository $userRepository, User $user, Request $request, EntityManagerInterface $em)
+	public function modify(UserRepository $userRepository, User $user, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
 	{
 		$user = $userRepository->find($user->getId());
 
 		$datas = json_decode($request->getContent());
 
 		if($datas) {
-			if(isset($datas->surname)) {
-				$user->setSurname($datas->surname);
-				$em->persist($user);
+			if(isset($datas->surname) || isset($datas->firstname) || isset($datas->email)) {
+				if(isset($datas->surname)) {
+					$user->setSurname($datas->surname);
+					$validator->validate($user);
+					$em->persist($user);
+				}
+				if(isset($datas->firstname)) {
+					$user->setFirstname($datas->firstname);
+					$validator->validate($user);
+					$em->persist($user);
+				}
+				if(isset($datas->email)) {
+					$user->setEmail($datas->email);
+					$validator->validate($user);
+					$em->persist($user);
+				}
+				$em->flush();
+				return $this->json([
+					'status' => 201,
+					'message' => 'L\'utilisateur a bien été modifié'
+				], 201);
+			} else {
+				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 500, [], ['groups' => 'users:read']);
 			}
-			if(isset($datas->firstname)) {
-				$user->setFirstname($datas->firstname);
-				$em->persist($user);
-			}
-			if(isset($datas->email)) {
-				$user->setEmail($datas->email);
-				$em->persist($user);
-			}
-			$em->flush();
-			return $this->json([
-				'status' => 201,
-				'message' => 'L\'utilisateur a bien été modifié'
-			], 201);
-
 		}
 
 		return $this->json($user, 200, [], ['groups' => 'users:read']);
