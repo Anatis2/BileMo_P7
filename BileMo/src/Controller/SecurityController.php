@@ -58,7 +58,6 @@ class SecurityController extends AbstractController
 					'status' => 201,
 					'message' => 'Le client a bien été créé'
 				], 201);
-				return new JsonResponse($data, 201);
 			} catch (NotEncodableValueException $e) {
 				return $this->json([
 					'status' => 400,
