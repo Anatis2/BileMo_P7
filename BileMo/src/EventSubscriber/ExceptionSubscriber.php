@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Doctrine\ORM\NonUniqueResultException;
@@ -61,6 +62,15 @@ class ExceptionSubscriber implements EventSubscriberInterface
 		if($exception instanceof NotEncodableValueException) {
 			$data = [
 				'message' => 'Une erreur est survenue : veuillez vérifier la syntaxe de votre JSON.'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
+		if($exception instanceof MethodNotAllowedHttpException) {
+			$data = [
+				'message' => 'Cette méthode n\'existe pas pour cette route : veuillez vérifier votre méthode.'
 			];
 
 			$response = new JsonResponse($data);

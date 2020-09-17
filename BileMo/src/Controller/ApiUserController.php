@@ -84,7 +84,12 @@ class ApiUserController extends AbstractController
 
 		if($jsonReceived) {
 			$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
-			if($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getFirstname()) && !is_null($userModified->getEmail())) {
+			if(is_null($userModified->getFirstname())) {
+				$user->setFirstname(" ");
+				$em->persist($user);
+				$em->flush();
+			}
+			if($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getEmail())) {
 					$client = $securityController->getUser();
 					$user->setClient($client);
 					$user->setSurname($userModified->getSurname());
