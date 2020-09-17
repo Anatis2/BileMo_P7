@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,7 +15,7 @@ class UserType extends AbstractType
         $builder
             ->add('surname')
             ->add('firstname')
-            ->add('email')
+            ->add('email', EmailType::class)
         ;
     }
 
@@ -22,6 +23,7 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+			'csrf_protection' => false
         ]);
     }
 }

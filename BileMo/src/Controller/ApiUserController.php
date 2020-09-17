@@ -66,20 +66,27 @@ class ApiUserController extends AbstractController
 	 *     description="Modifie les détails d'un utilisateur",
 	 * )
 	 */
-	public function modify(UserRepository $userRepository, User $user, Request $request, EntityManagerInterface $em, ValidatorInterface $validator)
+	public function modify(User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
 	{
-		$user = $userRepository->find($user->getId());
+		$jsonReceived = $request->getContent();
 
-		$form = $this->createForm(UserType::class);
-		$form->submit($request->getContent());
-
-		if($form->isSubmitted()) {
-			if($form->isValid()) {
-				return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:read']);
-			} else {
-				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 400, [], ['groups' => 'users:read']);
+		if($jsonReceived) {
+			$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
+			if($userModified && !is_null($userModified)) {
+				$client = $securityController->getUser();
+				$user->setClient($client);
+				$user->setSurname($userModified->getSurname());
+				$user->setFirstname($userModified->getFirstname());
+				$user->setEmail($userModified->getEmail());
+				$validator->validate($user);
+				try{
+					$em->persist($user);
+					$em->flush();
+					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:read']);
+				} catch(\Exception $e) {
+					return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 400, [], ['groups' => 'users:read']);
+				}
 			}
-
 		}
 
 		return $this->json($user, 200, [], ['groups' => 'users:read']);

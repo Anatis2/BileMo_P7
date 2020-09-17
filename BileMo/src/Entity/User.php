@@ -28,13 +28,13 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank(message="Le champ surname ne peut pas être vide")
-	 * @Groups({"users:read", "users:create"})
+	 * @Groups({"users:read", "users:create", "users:modify"})
      */
     private $surname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-	 * @Groups({"users:read", "users:create"})
+	 * @Groups({"users:read", "users:create", "users:modify"})
      */
     private $firstname;
 
@@ -42,7 +42,7 @@ class User
      * @ORM\Column(type="string", length=255)
 	 * @Assert\NotBlank(message="Le champ email ne peut pas être vide")
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
-	 * @Groups({"users:read", "users:create"})
+	 * @Groups({"users:read", "users:create", "users:modify"})
      */
     private $email;
 
