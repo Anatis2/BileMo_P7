@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -51,6 +52,15 @@ class ExceptionSubscriber implements EventSubscriberInterface
 			$data = [
 				'status' => $exception->getStatusCode(),
 				'message' => 'Les champs username et password sont requis'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
+		if($exception instanceof NotEncodableValueException) {
+			$data = [
+				'message' => 'Une erreur est survenue : veuillez vérifier la syntaxe de votre JSON.'
 			];
 
 			$response = new JsonResponse($data);

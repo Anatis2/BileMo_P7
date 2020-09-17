@@ -63,7 +63,19 @@ class ApiUserController extends AbstractController
 	 * @OA\Tag(name="Users")
 	 * @OA\Response(
 	 *     response=200,
+	 *     description="Affiche les détails d'un utilisateur",
+	 * )
+	 * @OA\Response(
+	 *     response=201,
 	 *     description="Modifie les détails d'un utilisateur",
+	 * )
+	 * @OA\Response(
+	 *     response=400,
+	 *     description="Les champs sont non conformes",
+	 * )
+	 * @OA\Response(
+	 *     response=404,
+	 *     description="La ressource n'a pas été trouvée (l'identifiant n'existe pas)",
 	 * )
 	 */
 	public function modify(User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
@@ -72,24 +84,22 @@ class ApiUserController extends AbstractController
 
 		if($jsonReceived) {
 			$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
-			if($userModified && !is_null($userModified)) {
-				$client = $securityController->getUser();
-				$user->setClient($client);
-				$user->setSurname($userModified->getSurname());
-				$user->setFirstname($userModified->getFirstname());
-				$user->setEmail($userModified->getEmail());
-				$validator->validate($user);
-				try{
+			if($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getFirstname()) && !is_null($userModified->getEmail())) {
+					$client = $securityController->getUser();
+					$user->setClient($client);
+					$user->setSurname($userModified->getSurname());
+					$user->setFirstname($userModified->getFirstname());
+					$user->setEmail($userModified->getEmail());
+					$validator->validate($user);
 					$em->persist($user);
 					$em->flush();
-					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:read']);
-				} catch(\Exception $e) {
-					return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs.", 400, [], ['groups' => 'users:read']);
-				}
+					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
+			} else {
+				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
 			}
 		}
 
-		return $this->json($user, 200, [], ['groups' => 'users:read']);
+		return $this->json($user, 200, [], ['groups' => 'users:modify']);
 	}
 
     /**
