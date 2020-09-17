@@ -1,5 +1,7 @@
 # BileMo_P7
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/27bf823640d44d36bf9719d92a7adb2a)](https://www.codacy.com/manual/Anatis2/BileMo_P7?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Anatis2/BileMo_P7&amp;utm_campaign=Badge_Grade)
+
 Bilemo est un Web service à destination des plateformes de vente de téléphonie mobile.
 
 Son principal objectif est de permettre à toute plateforme qui le souhaite d'avoir accès au catalogue de l'entreprise BileMo.
