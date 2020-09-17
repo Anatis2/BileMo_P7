@@ -1,0 +1,2 @@
+# BileMo_P7
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cd0b1470346246f985038c533ca36705)](https://app.codacy.com/manual/Anatis2/BileMo_P7?utm_source=github.com&utm_medium=referral&utm_content=Anatis2/BileMo_P7&utm_campaign=Badge_Grade_Dashboard)
