@@ -6,6 +6,7 @@ use App\Entity\Phone;
 use App\Repository\PhoneRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -68,8 +69,15 @@ class ApiPhoneController extends AbstractController
 
 		$phoneList = $phoneRepository->findAllPhones($page, $limit);
 
-		return $this->json($phoneList, 200, []);
+		$query = $phoneList->getQuery();
 
+		if(empty($query->getArrayResult())) {
+			return $this->json("Cette page n'existe pas", 404);
+		}
+
+		return $this->json($phoneList, 200, []);
 	}
+
+
 
 }

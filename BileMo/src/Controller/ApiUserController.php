@@ -55,8 +55,7 @@ class ApiUserController extends AbstractController
 	}
 
 	/**
-	 * @param UserRepository $userRepository
-	 * @param User $user
+	 * Modifie les détails d'un utilisateur
 	 *
 	 * @Route("/users/{id}", name="api_users_modify", methods={"PUT"})
 	 *
@@ -127,6 +126,12 @@ class ApiUserController extends AbstractController
 		$limit = 10;
 
 		$userList = $userRepository->findAllUsers($page, $limit);
+
+		$query = $userList->getQuery();
+
+		if(empty($query->getArrayResult())) {
+			return $this->json("Cette page n'existe pas", 404);
+		}
 
 		return $this->json($userList, 200, [], ['groups' => 'users:read']);
     }
