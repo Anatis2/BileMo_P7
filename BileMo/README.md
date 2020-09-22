@@ -21,6 +21,12 @@ Etapes d'installation
 
 5) Insérez les données de test, avec la commande "php bin/console doctrine:fixtures:load"
 
+6) Générer les clés d'authentification à l'aide de JWT :
+    -> créer un dossier JWT (mkdir config/jwt)
+    -> créer une clé privée (openssl genrsa -out config/jwt/private.pem -aes256 4096) et choisir une pass_phrase
+    -> créer une clé publique (openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem)
+    -> ajouter votre pass_phrase dans le fichier .env (JWT_PASSPHRASE=(votrePassPhrase))
+
 Utilisation
 ============
 
