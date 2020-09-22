@@ -22,13 +22,13 @@ class Client implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-	 * @Groups({"users:read"})
+	 * @Groups({"users:read", "clients:read"})
      */
     private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, nullable=true)
-	 * @Groups({"users:read"})
+	 * @Groups({"users:read", "clients:read"})
 	 */
     private $name;
 
@@ -36,6 +36,7 @@ class Client implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
 	 * @Assert\Email(message="Veuillez entrer une adresse mail valide")
 	 * @Assert\NotBlank(message="Le champ email ne peut pas être vide")
+	 * @Groups({"clients:read"})
      */
     private $email;
 

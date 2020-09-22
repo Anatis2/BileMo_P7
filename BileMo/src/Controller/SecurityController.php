@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,10 +23,34 @@ use Swagger\Annotations as OA;
  */
 class SecurityController extends AbstractController
 {
+
+	/**
+	 * Affiche les détails du client connecté
+	 *
+	 * @Route("/clients", name="api_clients_details", methods={"GET"})
+	 *
+	 * @OA\Tag(name="Clients")
+	 * @OA\Response(
+	 *     response=200,
+	 *     description="Affiche les détails du client connecté",
+	 * )
+	 */
+	public function showClient()
+	{
+		$client = $this->getUser();
+
+		if($client) {
+			return $this->json($client, 200, [], ['groups' => 'clients:read']);
+		}
+
+	}
+
     /**
 	 * Enregistre un client (fournisseur) dans la BDD
 	 *
      * @Route("/register", name="api_clients_register", methods={"POST"})
+	 *
+	 * @OA\Tag(name="Clients")
 	 * @OA\Response(
 	 *     response=200,
 	 *     description="L'inscription a bien été prise en compte",
@@ -81,6 +106,8 @@ class SecurityController extends AbstractController
 	 * Authentifie le client (fournisseur)
 	 *
 	 * @Route("/login_check", name="api_clients_login", methods={"POST"})
+	 *
+	 * @OA\Tag(name="Clients")
 	 * @OA\Response(
 	 *     response=200,
 	 *     description="L'authentification s'est bien passée",
