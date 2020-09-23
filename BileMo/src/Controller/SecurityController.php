@@ -25,14 +25,14 @@ class SecurityController extends AbstractController
 {
 
 	/**
-	 * Affiche les détails du client connecté
+	 * Affiche les détails du client (fournisseur) connecté
 	 *
 	 * @Route("/clients", name="api_clients_details", methods={"GET"})
 	 *
 	 * @OA\Tag(name="Clients")
 	 * @OA\Response(
 	 *     response=200,
-	 *     description="Affiche les détails du client connecté",
+	 *     description="Affiche les détails du client (fournisseur) connecté",
 	 * )
 	 */
 	public function showClient()

@@ -5,9 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/api-platform/core" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/brick/varexporter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/collections" />
@@ -31,22 +29,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/fig/link-util" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/fzaninotto/faker" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jmeyering/hal-explorer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas-api-tools/api-tools-versioning" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-code" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-config" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-escaper" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-eventmanager" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-http" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-json" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-loader" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-modulemanager" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-mvc" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-router" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-servicemanager" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-stdlib" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-uri" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-validator" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-view" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-zendframework-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />

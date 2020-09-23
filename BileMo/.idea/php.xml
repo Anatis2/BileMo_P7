@@ -120,22 +120,6 @@
       <path value="$PROJECT_DIR$/vendor/nelmio/api-doc-bundle" />
       <path value="$PROJECT_DIR$/vendor/exsyst/swagger" />
       <path value="$PROJECT_DIR$/vendor/zircote/swagger-php" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-view" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-validator" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-stdlib" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-loader" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-mvc" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-http" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-json" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-escaper" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-uri" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-config" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-router" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-modulemanager" />
-      <path value="$PROJECT_DIR$/vendor/laminas/laminas-servicemanager" />
-      <path value="$PROJECT_DIR$/vendor/brick/varexporter" />
-      <path value="$PROJECT_DIR$/vendor/container-interop/container-interop" />
-      <path value="$PROJECT_DIR$/vendor/laminas-api-tools/api-tools-versioning" />
       <path value="$PROJECT_DIR$/vendor/swagger-api/swagger-ui" />
     </include_path>
   </component>

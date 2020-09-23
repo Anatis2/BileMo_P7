@@ -30,6 +30,18 @@ class UserRepository extends ServiceEntityRepository
 		return new Paginator($query);
 	}
 
+	public function findAllUsersByClient($page, $limit, $clientId)
+	{
+		$query = $this->createQueryBuilder('p')
+			->where('p.client = :client')
+			->setParameter('client', $clientId)
+			->getQuery()
+			->setFirstResult(($page - 1) * $limit)
+			->setMaxResults($limit);
+
+		return new Paginator($query);
+	}
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

@@ -125,7 +125,10 @@ class ApiUserController extends AbstractController
 		}
 		$limit = 10;
 
-		$userList = $userRepository->findAllUsers($page, $limit);
+		$client = $this->getUser();
+		$clientID = $client->getId();
+
+		$userList = $userRepository->findAllUsersByClient($page, $limit, $clientID);
 
 		$query = $userList->getQuery();
 
