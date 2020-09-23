@@ -28,7 +28,7 @@ class ApiUserController extends AbstractController
 {
 
 	/**
-	 * Affiche les détails d'un utilisateur
+	 * Affiche les détails d'un utilisateur du client actuellement authentifié
 	 *
 	 * @Route("/users/{id}", name="api_users_details", methods={"GET"})
 	 *
@@ -55,7 +55,7 @@ class ApiUserController extends AbstractController
 	}
 
 	/**
-	 * Modifie les détails d'un utilisateur
+	 * Modifie les détails d'un utilisateur du client actuellement authentifié
 	 *
 	 * @Route("/users/{id}", name="api_users_modify", methods={"PUT"})
 	 *
@@ -107,7 +107,7 @@ class ApiUserController extends AbstractController
 	}
 
     /**
-	 * Liste l'ensemble des utilisateurs présents en BDD
+	 * Liste l'ensemble des utilisateurs présents dans la BDD du client actuellement authentifié
 	 *
      * @Route("/users", name="api_users_index", methods={"GET"})
 	 *
@@ -128,7 +128,7 @@ class ApiUserController extends AbstractController
 		$client = $this->getUser();
 		$clientID = $client->getId();
 
-		$userList = $userRepository->findAllUsersByClient($page, $limit, $clientID);
+		$userList = $userRepository->findUsersByClientPage($page, $limit, $clientID);
 
 		$query = $userList->getQuery();
 
@@ -140,7 +140,7 @@ class ApiUserController extends AbstractController
     }
 
 	/**
-	 * Créée un nouvel utilisateur
+	 * Créée un nouvel utilisateur dans la base du client actuellement authentifié
 	 *
 	 * @Route("/users", name="api_users_create", methods={"POST"})
 	 *
@@ -178,7 +178,7 @@ class ApiUserController extends AbstractController
 	}
 
 	/**
-	 * Supprime un utilisateur
+	 * Supprime un utilisateur du client actuellement authentifié
 	 *
 	 * @Route("/users/{id}", name="api_users_delete", methods={"DELETE"})
 	 *
@@ -192,10 +192,25 @@ class ApiUserController extends AbstractController
 	 *     description="L'identifiant n'existe pas",
 	 * )
 	 */
-	public function delete(User $user, EntityManagerInterface $em)
+	public function delete(User $user, EntityManagerInterface $em, UserRepository $userRepository)
 	{
-		$em->remove($user);
-		$em->flush();
-		return new Response(null, 204);
+		$client = $this->getUser();
+		$clientId = $client->getId();
+
+		$usersList = $userRepository->findUsersByClient($clientId);
+
+		foreach ($usersList as $k => $v) {
+			if($user->getId() == $v->getId()) {
+				$em->remove($user);
+				$em->flush();
+				return new Response(null, 204);
+			}
+		}
+
+		return $this->json([
+			'status' => 400,
+			'message' => "Vous ne pouvez pas supprimer ce client"
+		], 400);
+
 	}
 }

@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,20 +21,20 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAllUsers($page, $limit)
+    public function findUsersByClient($clientId)
 	{
-		$query = $this->createQueryBuilder('p')
-			->getQuery()
-			->setFirstResult(($page - 1) * $limit)
-			->setMaxResults($limit);
+		$query = $this->createQueryBuilder('u')
+					  ->where('u.client = :client')
+					  ->setParameter('client', $clientId)
+					  ->getQuery();
 
-		return new Paginator($query);
+		return $query->execute();
 	}
 
-	public function findAllUsersByClient($page, $limit, $clientId)
+	public function findUsersByClientPage($page, $limit, $clientId)
 	{
-		$query = $this->createQueryBuilder('p')
-			->where('p.client = :client')
+		$query = $this->createQueryBuilder('u')
+			->where('u.client = :client')
 			->setParameter('client', $clientId)
 			->getQuery()
 			->setFirstResult(($page - 1) * $limit)
