@@ -7,6 +7,7 @@ use App\Entity\Client;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\ClientChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,8 +47,16 @@ class ApiUserController extends AbstractController
 	 *     description="Le token est invalide, a expiré, ou n'est pas renseigné",
 	 * )
 	 */
-	public function details(UserRepository $userRepository, User $user)
+	public function details(UserRepository $userRepository, User $user, ClientChecker $clientChecker)
 	{
+
+		if(!$clientChecker->checkClient($userRepository, $user)) {
+			return $this->json([
+				'status' => 400,
+				'message' => "Vous ne pouvez pas voir ce client"
+			], 400);
+		};
+
 		$user = $userRepository->find($user->getId());
 
 		return $this->json($user, 200, [], ['groups' => 'users:read']);
@@ -77,43 +86,37 @@ class ApiUserController extends AbstractController
 	 *     description="La ressource n'a pas été trouvée (l'identifiant n'existe pas)",
 	 * )
 	 */
-	public function modify(UserRepository $userRepository, User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
+	public function modify(ClientChecker $clientChecker, UserRepository $userRepository, User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
-		$client = $this->getUser();
-		$clientId = $client->getId();
+		if(!$clientChecker->checkClient($userRepository, $user)) {
+			return $this->json([
+				'status' => 400,
+				'message' => "Vous ne pouvez pas modifier ce client"
+			], 400);
+		};
 
-		$usersList = $userRepository->findUsersByClient($clientId);
-
-		foreach ($usersList as $k => $v) {
-			if($jsonReceived) {
-				if($user->getId() == $v->getId()) {
-					$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
-					if (is_null($userModified->getFirstname())) {
-						$user->setFirstname(" ");
-						$em->persist($user);
-						$em->flush();
-					}
-					if ($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getEmail())) {
-						$client = $securityController->getUser();
-						$user->setClient($client);
-						$user->setSurname($userModified->getSurname());
-						$user->setFirstname($userModified->getFirstname());
-						$user->setEmail($userModified->getEmail());
-						$validator->validate($user);
-						$em->persist($user);
-						$em->flush();
-						return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
-					} else {
-						return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
-					}
+		if($jsonReceived) {
+				$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
+				if (is_null($userModified->getFirstname())) {
+					$user->setFirstname(" ");
+					$em->persist($user);
+					$em->flush();
 				}
-				return $this->json([
-					'status' => 400,
-					'message' => "Vous ne pouvez pas modifier ce client"
-				], 400);
-			}
+				if ($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getEmail())) {
+					$client = $securityController->getUser();
+					$user->setClient($client);
+					$user->setSurname($userModified->getSurname());
+					$user->setFirstname($userModified->getFirstname());
+					$user->setEmail($userModified->getEmail());
+					$validator->validate($user);
+					$em->persist($user);
+					$em->flush();
+					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
+				} else {
+					return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
+				}
 		}
 
 		return $this->json($user, 200, [], ['groups' => 'users:modify']);
@@ -205,25 +208,19 @@ class ApiUserController extends AbstractController
 	 *     description="L'identifiant n'existe pas",
 	 * )
 	 */
-	public function delete(User $user, EntityManagerInterface $em, UserRepository $userRepository)
+	public function delete(User $user, EntityManagerInterface $em, UserRepository $userRepository, ClientChecker $clientChecker)
 	{
-		$client = $this->getUser();
-		$clientId = $client->getId();
 
-		$usersList = $userRepository->findUsersByClient($clientId);
+		if(!$clientChecker->checkClient($userRepository, $user)) {
+			return $this->json([
+				'status' => 400,
+				'message' => "Vous ne pouvez pas supprimer ce client"
+			], 400);
+		};
 
-		foreach ($usersList as $k => $v) {
-			if($user->getId() == $v->getId()) {
-				$em->remove($user);
-				$em->flush();
-				return new Response(null, 204);
-			}
-		}
-
-		return $this->json([
-			'status' => 400,
-			'message' => "Vous ne pouvez pas supprimer ce client"
-		], 400);
+		$em->remove($user);
+		$em->flush();
+		return new Response(null, 204);
 
 	}
 }
