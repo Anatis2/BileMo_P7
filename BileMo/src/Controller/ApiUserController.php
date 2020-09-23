@@ -77,29 +77,42 @@ class ApiUserController extends AbstractController
 	 *     description="La ressource n'a pas été trouvée (l'identifiant n'existe pas)",
 	 * )
 	 */
-	public function modify(User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
+	public function modify(UserRepository $userRepository, User $user, EntityManagerInterface $em, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
-		if($jsonReceived) {
-			$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
-			if(is_null($userModified->getFirstname())) {
-				$user->setFirstname(" ");
-				$em->persist($user);
-				$em->flush();
-			}
-			if($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getEmail())) {
-					$client = $securityController->getUser();
-					$user->setClient($client);
-					$user->setSurname($userModified->getSurname());
-					$user->setFirstname($userModified->getFirstname());
-					$user->setEmail($userModified->getEmail());
-					$validator->validate($user);
-					$em->persist($user);
-					$em->flush();
-					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
-			} else {
-				return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
+		$client = $this->getUser();
+		$clientId = $client->getId();
+
+		$usersList = $userRepository->findUsersByClient($clientId);
+
+		foreach ($usersList as $k => $v) {
+			if($jsonReceived) {
+				if($user->getId() == $v->getId()) {
+					$userModified = $serializer->deserialize($jsonReceived, User::class, 'json');
+					if (is_null($userModified->getFirstname())) {
+						$user->setFirstname(" ");
+						$em->persist($user);
+						$em->flush();
+					}
+					if ($userModified && !is_null($userModified) && !is_null($userModified->getSurname()) && !is_null($userModified->getEmail())) {
+						$client = $securityController->getUser();
+						$user->setClient($client);
+						$user->setSurname($userModified->getSurname());
+						$user->setFirstname($userModified->getFirstname());
+						$user->setEmail($userModified->getEmail());
+						$validator->validate($user);
+						$em->persist($user);
+						$em->flush();
+						return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
+					} else {
+						return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
+					}
+				}
+				return $this->json([
+					'status' => 400,
+					'message' => "Vous ne pouvez pas modifier ce client"
+				], 400);
 			}
 		}
 
