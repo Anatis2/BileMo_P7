@@ -113,7 +113,7 @@ class ApiUserController extends AbstractController
 					$validator->validate($user);
 					$em->persist($user);
 					$em->flush();
-					return $this->json("L'utilisateur a bien été modifié", 201, [], ['groups' => 'users:modify']);
+					return $this->json($user, 200, [], ['groups' => 'users:modify']);
 				} else {
 					return $this->json("Erreur : l'utilisateur n'a pas pu être modifié. Veuillez vérifier la validité de vos champs. Champs requis : surname, firstname et email", 400, [], ['groups' => 'users:modify']);
 				}
@@ -175,7 +175,7 @@ class ApiUserController extends AbstractController
 	 *     description="Les champs sont non conformes ou l'email est déjà utilisé",
 	 * )
 	 */
-    public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
+    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
@@ -193,10 +193,13 @@ class ApiUserController extends AbstractController
 					$user->setClient($client);
 					$validator->validate($user);
 					$em->persist($user);
-					$users[] = $user; // On le tableau users, afin de pouvoir les afficher dans la réponse
+					$users[] = $user; // On ajoute le tableau users, afin de pouvoir les afficher dans la réponse
 				}
 			}
 			$em->flush();
+			if(empty($users)) {
+				return $this->json("Une erreur est survenue : veuillez vérifier vos champs (champs requis : surname et email)", 400);
+			}
 			return $this->json($users, 201, [], ['groups' => 'users:create']);
 		} else {
 			return $this->json("Champs requis : surname et email", 400);
