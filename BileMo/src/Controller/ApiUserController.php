@@ -149,7 +149,7 @@ class ApiUserController extends AbstractController
 		$query = $userList->getQuery();
 
 		if(empty($query->getArrayResult())) {
-			return $this->json("Cette page n'existe pas", 404);
+			return $this->json("Il n'y a pas d'utilisateurs dans cette base de données", 404);
 		}
 
 		return $this->json($userList, 200, [], ['groups' => 'users:read']);
@@ -174,22 +174,33 @@ class ApiUserController extends AbstractController
 	{
 		$jsonReceived = $request->getContent();
 
-		try {
-			$user = $serializer->deserialize($jsonReceived, User::class, 'json');
-			$user->setRegisteredAt(new \DateTime());
+		$data = json_decode($jsonReceived, true); // On convertit le JSON en variable PHP
 
-			$client = $securityController->getUser();
-			$user->setClient($client);
+		if($jsonReceived && isset($data['surname']) && isset($data['email'])) {
+			try {
+				if (!is_array(reset($data))) $data = [$data]; // Si les data ne sont pas un array, alors on les convertit en array
 
-			$validator->validate($user);
-			$em->persist($user);
+				$users = [];
+				$client = $securityController->getUser();
+
+				foreach ($data as $d) {
+
+						$user = new User();
+						$user->setSurname($d['surname']);
+						$user->setEmail($d['email']);
+						$user->setRegisteredAt(new \DateTime());
+						$user->setClient($client);
+						$validator->validate($user);
+						$em->persist($user);
+						$users[] = $user; // On le tableau users, afin de pouvoir les afficher dans la réponse
+				}
+			} catch (\Exception $e) {
+				return new Response($e->getMessage());
+			}
 			$em->flush();
-			return $this->json($user, 201, [], ['groups' => 'users:create']);
-		} catch(NotEncodableValueException $e) {
-			return $this->json([
-				'status' => 400,
-				'message' => "Erreur : vos données n'ont pas été envoyées. Veuillez vérifier la syntaxe de votre JSON."
-			], 400);
+			return $this->json($users, 201, [], ['groups' => 'users:create']);
+		} else {
+			return $this->json("Champs requis : surname et email", 400);
 		}
 	}
 

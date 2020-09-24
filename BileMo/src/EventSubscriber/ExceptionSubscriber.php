@@ -49,10 +49,18 @@ class ExceptionSubscriber implements EventSubscriberInterface
 			$event->setResponse($response);
 		}
 
-		if($exception instanceof BadRequestHttpException) {
+		if($exception instanceof \TypeError) {
 			$data = [
-				'status' => $exception->getStatusCode(),
-				'message' => 'Les champs username et password sont requis'
+				'message' => 'Cet email est déjà utilisé'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
+		if($exception instanceof \ErrorException) {
+			$data = [
+				'message' => 'Une erreur est survenue : veuillez vérifier la syntaxe de votre JSON.'
 			];
 
 			$response = new JsonResponse($data);
@@ -67,6 +75,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
 			$response = new JsonResponse($data);
 			$event->setResponse($response);
 		}
+
+		if($exception instanceof BadRequestHttpException) {
+			$data = [
+				'status' => $exception->getStatusCode(),
+				'message' => 'Les champs username et password sont requis'
+			];
+
+			$response = new JsonResponse($data);
+			$event->setResponse($response);
+		}
+
 
 		if($exception instanceof MethodNotAllowedHttpException) {
 			$data = [
