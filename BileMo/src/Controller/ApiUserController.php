@@ -149,7 +149,7 @@ class ApiUserController extends AbstractController
 		$query = $userList->getQuery();
 
 		if(empty($query->getArrayResult())) {
-			return $this->json("Il n'y a pas d'utilisateurs dans cette base de données", 404);
+			return $this->json("Aucun utilisateur n'a été trouvé. Veuillez vérifier si vous êtes sur la bonne page, ou bien créez un utilisateur.", 404);
 		}
 
 		return $this->json($userList, 200, [], ['groups' => 'users:read']);
@@ -170,32 +170,26 @@ class ApiUserController extends AbstractController
 	 *     description="Les champs sont non conformes ou l'email est déjà utilisé",
 	 * )
 	 */
-    public function create(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
+    public function create(Request $request, EntityManagerInterface $em, ValidatorInterface $validator, SecurityController $securityController)
 	{
 		$jsonReceived = $request->getContent();
 
-		$data = json_decode($jsonReceived, true); // On convertit le JSON en variable PHP
-
-		if($jsonReceived && isset($data['surname']) && isset($data['email'])) {
-			try {
-				if (!is_array(reset($data))) $data = [$data]; // Si les data ne sont pas un array, alors on les convertit en array
-
+		if($jsonReceived) {
+			$data = json_decode($jsonReceived, true); // On convertit le JSON en variable PHP
+			if (!is_array(reset($data))) $data = [$data]; // Si les data ne sont pas un array, alors on les convertit en array
 				$users = [];
 				$client = $securityController->getUser();
-
 				foreach ($data as $d) {
-
-						$user = new User();
-						$user->setSurname($d['surname']);
-						$user->setEmail($d['email']);
-						$user->setRegisteredAt(new \DateTime());
-						$user->setClient($client);
-						$validator->validate($user);
-						$em->persist($user);
-						$users[] = $user; // On le tableau users, afin de pouvoir les afficher dans la réponse
+					if(isset($d['surname']) && isset($d['email']))  {
+					$user = new User();
+					$user->setSurname($d['surname']);
+					$user->setEmail($d['email']);
+					$user->setRegisteredAt(new \DateTime());
+					$user->setClient($client);
+					$validator->validate($user);
+					$em->persist($user);
+					$users[] = $user; // On le tableau users, afin de pouvoir les afficher dans la réponse
 				}
-			} catch (\Exception $e) {
-				return new Response($e->getMessage());
 			}
 			$em->flush();
 			return $this->json($users, 201, [], ['groups' => 'users:create']);

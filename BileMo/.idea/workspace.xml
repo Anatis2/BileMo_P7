@@ -4,7 +4,6 @@
     <list default="true" id="344569f3-23c7-49b3-ad4b-f6e1c435099c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ApiUserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ApiUserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EventSubscriber/ExceptionSubscriber.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/EventSubscriber/ExceptionSubscriber.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/vendor/api-platform/core/" />
     <ignored path="$PROJECT_DIR$/vendor/brick/varexporter/" />
@@ -154,8 +153,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Controller/ApiUserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="178" column="28" selection-start-line="178" selection-start-column="28" selection-end-line="178" selection-end-column="28" />
+            <state relative-caret-position="243">
+              <caret line="151" column="145" selection-start-line="151" selection-start-column="145" selection-end-line="151" selection-end-column="145" />
               <folding>
                 <element signature="e#34#84#0#PHP" expanded="true" />
               </folding>
@@ -166,7 +165,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/EventSubscriber/ExceptionSubscriber.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
+            <state relative-caret-position="65">
               <caret line="76" column="9" selection-start-line="76" selection-start-column="9" selection-end-line="76" selection-end-column="9" />
               <folding>
                 <element signature="e#39#102#0#PHP" expanded="true" />
@@ -230,8 +229,8 @@
       <find>$serializer</find>
       <find>NotEncodableValueException</find>
       <find>json_decode</find>
-      <find>requis</find>
       <find>email</find>
+      <find>requis</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -464,12 +463,12 @@
       <option name="presentableId" value="Default" />
       <updated>1600336364902</updated>
       <workItem from="1600336370485" duration="7496000" />
-      <workItem from="1600760144426" duration="38727000" />
+      <workItem from="1600760144426" duration="40859000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62856000" />
+    <option name="totallyTimeSpent" value="64988000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
@@ -704,7 +703,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/EventSubscriber/ExceptionSubscriber.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
+        <state relative-caret-position="65">
           <caret line="76" column="9" selection-start-line="76" selection-start-column="9" selection-end-line="76" selection-end-column="9" />
           <folding>
             <element signature="e#39#102#0#PHP" expanded="true" />
@@ -714,8 +713,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Controller/ApiUserController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="178" column="28" selection-start-line="178" selection-start-column="28" selection-end-line="178" selection-end-column="28" />
+        <state relative-caret-position="243">
+          <caret line="151" column="145" selection-start-line="151" selection-start-column="145" selection-end-line="151" selection-end-column="145" />
           <folding>
             <element signature="e#34#84#0#PHP" expanded="true" />
           </folding>
