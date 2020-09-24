@@ -51,7 +51,7 @@ class ApiPhoneController extends AbstractController
 	/**
 	 * Liste l'ensemble des téléphones présents dans le catalogue
 	 *
-	 * @Route("/phones/{page<\d+>?1}", name="api_phones_index", methods={"GET"})
+	 * @Route("/phones", name="api_phones_index", methods={"GET"})
 	 *
 	 * @OA\Tag(name="Phones")
 	 * @OA\Response(
@@ -75,7 +75,12 @@ class ApiPhoneController extends AbstractController
 			return $this->json("Cette page n'existe pas", 404);
 		}
 
-		return $this->json($phoneList, 200, []);
+		$response = $this->json($phoneList, 200, []);
+
+		$response->setPublic();
+		$response->setMaxAge(3600);
+
+		return $response;
 	}
 
 

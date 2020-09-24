@@ -152,7 +152,12 @@ class ApiUserController extends AbstractController
 			return $this->json("Aucun utilisateur n'a été trouvé. Veuillez vérifier si vous êtes sur la bonne page, ou bien créez un utilisateur.", 404);
 		}
 
-		return $this->json($userList, 200, [], ['groups' => 'users:read']);
+		$response = $this->json($userList, 200, [], ['groups' => 'users:read']);
+
+		$response->setPublic();
+		$response->setMaxAge(3600);
+
+		return $response;
     }
 
 	/**
@@ -177,10 +182,10 @@ class ApiUserController extends AbstractController
 		if($jsonReceived) {
 			$data = json_decode($jsonReceived, true); // On convertit le JSON en variable PHP
 			if (!is_array(reset($data))) $data = [$data]; // Si les data ne sont pas un array, alors on les convertit en array
-				$users = [];
-				$client = $securityController->getUser();
-				foreach ($data as $d) {
-					if(isset($d['surname']) && isset($d['email']))  {
+			$users = [];
+			$client = $securityController->getUser();
+			foreach ($data as $d) {
+				if (isset($d['surname']) && isset($d['email'])) {
 					$user = new User();
 					$user->setSurname($d['surname']);
 					$user->setEmail($d['email']);
